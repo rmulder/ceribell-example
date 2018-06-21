@@ -5,12 +5,14 @@
 process.title = 'node-chat';
 
 // Port where we'll run the websocket server
-var webSocketsServerPort = 8080;
+const webSocketsServerPort = 8080;
 
 // websocket and http servers
-var webSocketServer = require('websocket').server;
-var http = require('http');
-var fs = require('fs');
+const webSocketServer = require('websocket').server;
+const http = require('http');
+const fs = require('fs');
+const _ = require('lodash');
+const csv = require('csvtojson');
 
 /**
  * Global variables
@@ -82,8 +84,23 @@ var server = http.createServer(function(request, response) {
     }
 });
 
+let jsonData;
 server.listen(webSocketsServerPort, function() {
     console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
+    const csvFilePath = 'input/Ceribell_seizure_example.csv';
+    csv()
+        .fromFile(csvFilePath)
+        .then((jsonObj) => {
+            //console.log(jsonObj);
+            jsonData = jsonObj;
+            //console.log(jsonData);
+            /**
+             * [
+             * 	{a:"1", b:"2", c:"3"},
+             * 	{a:"4", b:"5". c:"6"}
+             * ]
+             */
+        })
 });
 
 /**
@@ -119,7 +136,10 @@ wsServer.on('request', function(request) {
     // user sent some message
     connection.on('message', function(message) {
         if (message.type === 'utf8') { // accept only text
-            if (userName === false) { // first message sent by user is their name
+            console.log('message: ', message);
+            if (message.utf8Data === 'getData') {
+                connection.sendUTF(JSON.stringify({ type: 'data', data: jsonData }));
+            } else if (userName === false) { // first message sent by user is their name
                 // remember user name
                 userName = htmlEntities(message.utf8Data);
                 // get random color and send it back to the user

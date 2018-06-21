@@ -8,9 +8,20 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "websocket": "^1.0.26"
+  "description": "",
+  "devDependencies": {
+    "eslint": "^4.19.1"
   },
-  "devDependencies": {},
-  "description": ""
+  "dependencies": {
+    "babel-cli": "6.24.1",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "1.5.2",
+    "bluebird": "^3.5.1",
+    "byline": "^5.0.0",
+    "csvtojson": "^2.0.3",
+    "lodash": "^4.17.5",
+    "promise": "^8.0.1",
+    "websocket": "^1.0.26"
+  }
 }
